@@ -1,0 +1,27 @@
+можно ссылаться на несуществующие конфигмапы
+image не изменился - потому что rs на это по барабану
+rs меняется, а контейнеры остаются
+
+kubectl delete pods -l name=myLabel - единственный способ заcтавить поды перечитать конфиг
+
+curl --insecure --cert peer.crt --key peer.key -X POST https://192.168.49.2:2379/v3/kv/range -d '{"key": "AA==", "range_end": "AA=="}'
+
+велью не парсится нормально - виноват etcd
+
+ни patch, ни apply не работают - только replace
+
+поиск путей помню работал ужасно
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+
+импортировать сертификат в minikube - это создать секрет?????????
+$ cp minikube.crt $HOME/.minikube/certs/
+$ minikube start --embed-certs
+
+не удобно созлавать секреты через шаблон
+
+из-за того что написано на рекате невозможно дебажить через консоль
+
+https://bobbyhadz.com/blog/you-need-to-enable-javascript-to-run-this-app
+
+секреты не секретные

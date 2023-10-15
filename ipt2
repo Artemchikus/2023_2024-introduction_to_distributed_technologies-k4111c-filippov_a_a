@@ -1,0 +1,145 @@
+:CNI-0aa36882715939df2b00385d - [0:0]
+:CNI-0e518c93e09a8cad12de443d - [0:0]
+:CNI-37a7d6ea4d73c4c57b094f5e - [0:0]
+:CNI-7a98c7474ded9c0958bd409d - [0:0]
+:CNI-7f0a3f9ce2fadceb10c0ac91 - [0:0]
+:CNI-8866cf7a6b361a333ad741f4 - [0:0]
+:CNI-DN-0aa36882715939df2b003 - [0:0]
+:CNI-HOSTPORT-DNAT - [0:0]
+:CNI-HOSTPORT-MASQ - [0:0]
+:CNI-HOSTPORT-SETMARK - [0:0]
+:CNI-dbafbaa0bdcbac1242308218 - [0:0]
+:CNI-dd5190e593d37641cad1a4c6 - [0:0]
+
+:KUBE-EXT-CG5I4G2RS3ZVWGLK - [0:0]
+:KUBE-EXT-EDNDUDH2C75GIR6O - [0:0]
+:KUBE-EXT-LPLI5PP7N5LEMN6C - [0:0]
+
+
+:KUBE-SEP-AETKQYFO7WYOL6I2 - [0:0]
+:KUBE-SEP-BNI63XFAC34NGSSW - [0:0]
+:KUBE-SEP-FJULLSD7XJG4UI6Z - [0:0]
+:KUBE-SEP-GZRVRHJZPT7RZZM4 - [0:0]
+:KUBE-SEP-PR7ZAUAKSXCSP5NI - [0:0]
+:KUBE-SEP-RGYAGYZ6WFG3KA67 - [0:0]
+:KUBE-SEP-SPXS4Q7EQGBJVLTY - [0:0]
+:KUBE-SEP-UBDAZU6DDT47PLRO - [0:0]
+:KUBE-SEP-VPILYQBSPPXYB66K - [0:0]
+
+:KUBE-SVC-CG5I4G2RS3ZVWGLK - [0:0]
+:KUBE-SVC-EDNDUDH2C75GIR6O - [0:0]
+:KUBE-SVC-ERIFXISQEP7F7OF4 - [0:0]
+:KUBE-SVC-EZYNCFY2F7N6OQA2 - [0:0]
+:KUBE-SVC-JD5MR3NA4I4DYORP - [0:0]
+:KUBE-SVC-LPLI5PP7N5LEMN6C - [0:0]
+:KUBE-SVC-NPX46M4PTMTKRN6Y - [0:0]
+:KUBE-SVC-TCOU7JCQXEZGVUNU - [0:0]
+
+-A POSTROUTING -s 10.244.0.2/32 -m comment --comment "name: \"bridge\" id: \"c29542333ca016987e1b27673f75e9338ff8f8a107581c3755dcf72b72a17a44\"" -j CNI-8866cf7a6b361a333ad741f4
+-A POSTROUTING -s 10.244.0.15/32 -m comment --comment "name: \"bridge\" id: \"36972d51ab68a5f6732025c3c2b98754e9470e559894b8ec19cc2cd26790bf11\"" -j CNI-0e518c93e09a8cad12de443d
+-A POSTROUTING -s 10.244.0.16/32 -m comment --comment "name: \"bridge\" id: \"c4ff53e7f30dcc75c356d0ae05924d01871650d780acef1ea0a5834a61951632\"" -j CNI-dbafbaa0bdcbac1242308218
+-A POSTROUTING -s 10.244.0.19/32 -m comment --comment "name: \"bridge\" id: \"3db53c6977b5fae34b49c2d25fe10d3a8f8acc7e3a16c5eaf63e5628de407175\"" -j CNI-dd5190e593d37641cad1a4c6
+-A POSTROUTING -s 10.244.0.20/32 -m comment --comment "name: \"bridge\" id: \"4857a4ff5619bf43078d7bc1b62180fd912e7a7a7381bac8e2f78ba26b75e3ac\"" -j CNI-7a98c7474ded9c0958bd409d
+-A POSTROUTING -s 10.244.0.21/32 -m comment --comment "name: \"bridge\" id: \"5969f05f86479f699c9b4871ad61fe5304ce88a52c788c63984f1bc3bb794e8d\"" -j CNI-0aa36882715939df2b00385d
+-A POSTROUTING -s 10.244.0.22/32 -m comment --comment "name: \"bridge\" id: \"ca28ead3556097551160229a58da01d49c9dcfa5a7068db1eb2aefb90db84e9e\"" -j CNI-37a7d6ea4d73c4c57b094f5e
+-A POSTROUTING -s 10.244.0.23/32 -m comment --comment "name: \"bridge\" id: \"5c468962e7b5498d64a86897bfba9d8c7023aef404a96cd9cfed811c881af66a\"" -j CNI-7f0a3f9ce2fadceb10c0ac91
+
+
+-A CNI-0aa36882715939df2b00385d -d 10.244.0.0/16 -m comment --comment "name: \"bridge\" id: \"5969f05f86479f699c9b4871ad61fe5304ce88a52c788c63984f1bc3bb794e8d\"" -j ACCEPT
+-A CNI-0aa36882715939df2b00385d ! -d 224.0.0.0/4 -m comment --comment "name: \"bridge\" id: \"5969f05f86479f699c9b4871ad61fe5304ce88a52c788c63984f1bc3bb794e8d\"" -j MASQUERADE
+-A CNI-0e518c93e09a8cad12de443d -d 10.244.0.0/16 -m comment --comment "name: \"bridge\" id: \"36972d51ab68a5f6732025c3c2b98754e9470e559894b8ec19cc2cd26790bf11\"" -j ACCEPT
+-A CNI-0e518c93e09a8cad12de443d ! -d 224.0.0.0/4 -m comment --comment "name: \"bridge\" id: \"36972d51ab68a5f6732025c3c2b98754e9470e559894b8ec19cc2cd26790bf11\"" -j MASQUERADE
+-A CNI-37a7d6ea4d73c4c57b094f5e -d 10.244.0.0/16 -m comment --comment "name: \"bridge\" id: \"ca28ead3556097551160229a58da01d49c9dcfa5a7068db1eb2aefb90db84e9e\"" -j ACCEPT
+-A CNI-37a7d6ea4d73c4c57b094f5e ! -d 224.0.0.0/4 -m comment --comment "name: \"bridge\" id: \"ca28ead3556097551160229a58da01d49c9dcfa5a7068db1eb2aefb90db84e9e\"" -j MASQUERADE
+-A CNI-7a98c7474ded9c0958bd409d -d 10.244.0.0/16 -m comment --comment "name: \"bridge\" id: \"4857a4ff5619bf43078d7bc1b62180fd912e7a7a7381bac8e2f78ba26b75e3ac\"" -j ACCEPT
+-A CNI-7a98c7474ded9c0958bd409d ! -d 224.0.0.0/4 -m comment --comment "name: \"bridge\" id: \"4857a4ff5619bf43078d7bc1b62180fd912e7a7a7381bac8e2f78ba26b75e3ac\"" -j MASQUERADE
+-A CNI-7f0a3f9ce2fadceb10c0ac91 -d 10.244.0.0/16 -m comment --comment "name: \"bridge\" id: \"5c468962e7b5498d64a86897bfba9d8c7023aef404a96cd9cfed811c881af66a\"" -j ACCEPT
+-A CNI-7f0a3f9ce2fadceb10c0ac91 ! -d 224.0.0.0/4 -m comment --comment "name: \"bridge\" id: \"5c468962e7b5498d64a86897bfba9d8c7023aef404a96cd9cfed811c881af66a\"" -j MASQUERADE
+-A CNI-8866cf7a6b361a333ad741f4 -d 10.244.0.0/16 -m comment --comment "name: \"bridge\" id: \"c29542333ca016987e1b27673f75e9338ff8f8a107581c3755dcf72b72a17a44\"" -j ACCEPT
+-A CNI-8866cf7a6b361a333ad741f4 ! -d 224.0.0.0/4 -m comment --comment "name: \"bridge\" id: \"c29542333ca016987e1b27673f75e9338ff8f8a107581c3755dcf72b72a17a44\"" -j MASQUERADE
+
+
+-A CNI-DN-0aa36882715939df2b003 -s 10.244.0.0/16 -p tcp -m tcp --dport 80 -j CNI-HOSTPORT-SETMARK
+-A CNI-DN-0aa36882715939df2b003 -s 127.0.0.1/32 -p tcp -m tcp --dport 80 -j CNI-HOSTPORT-SETMARK
+-A CNI-DN-0aa36882715939df2b003 -p tcp -m tcp --dport 80 -j DNAT --to-destination 10.244.0.21:80
+
+-A CNI-DN-0aa36882715939df2b003 -s 10.244.0.0/16 -p tcp -m tcp --dport 443 -j CNI-HOSTPORT-SETMARK
+-A CNI-DN-0aa36882715939df2b003 -s 127.0.0.1/32 -p tcp -m tcp --dport 443 -j CNI-HOSTPORT-SETMARK
+-A CNI-DN-0aa36882715939df2b003 -p tcp -m tcp --dport 443 -j DNAT --to-destination 10.244.0.21:443
+
+-A CNI-HOSTPORT-DNAT -p tcp -m comment --comment "dnat name: \"bridge\" id: \"5969f05f86479f699c9b4871ad61fe5304ce88a52c788c63984f1bc3bb794e8d\"" -m multiport --dports 80,443 -j CNI-DN-0aa36882715939df2b003
+
+-A CNI-HOSTPORT-MASQ -m mark --mark 0x2000/0x2000 -j MASQUERADE
+
+-A CNI-HOSTPORT-SETMARK -m comment --comment "CNI portfwd masquerade mark" -j MARK --set-xmark 0x2000/0x2000
+
+-A CNI-dbafbaa0bdcbac1242308218 -d 10.244.0.0/16 -m comment --comment "name: \"bridge\" id: \"c4ff53e7f30dcc75c356d0ae05924d01871650d780acef1ea0a5834a61951632\"" -j ACCEPT
+-A CNI-dbafbaa0bdcbac1242308218 ! -d 224.0.0.0/4 -m comment --comment "name: \"bridge\" id: \"c4ff53e7f30dcc75c356d0ae05924d01871650d780acef1ea0a5834a61951632\"" -j MASQUERADE
+-A CNI-dd5190e593d37641cad1a4c6 -d 10.244.0.0/16 -m comment --comment "name: \"bridge\" id: \"3db53c6977b5fae34b49c2d25fe10d3a8f8acc7e3a16c5eaf63e5628de407175\"" -j ACCEPT
+-A CNI-dd5190e593d37641cad1a4c6 ! -d 224.0.0.0/4 -m comment --comment "name: \"bridge\" id: \"3db53c6977b5fae34b49c2d25fe10d3a8f8acc7e3a16c5eaf63e5628de407175\"" -j MASQUERADE
+
+-A KUBE-EXT-CG5I4G2RS3ZVWGLK -m comment --comment "masquerade traffic for ingress-nginx/ingress-nginx-controller:http external destinations" -j KUBE-MARK-MASQ
+-A KUBE-EXT-CG5I4G2RS3ZVWGLK -j KUBE-SVC-CG5I4G2RS3ZVWGLK
+-A KUBE-EXT-EDNDUDH2C75GIR6O -m comment --comment "masquerade traffic for ingress-nginx/ingress-nginx-controller:https external destinations" -j KUBE-MARK-MASQ
+-A KUBE-EXT-EDNDUDH2C75GIR6O -j KUBE-SVC-EDNDUDH2C75GIR6O
+-A KUBE-EXT-LPLI5PP7N5LEMN6C -m comment --comment "masquerade traffic for default/react-np:http external destinations" -j KUBE-MARK-MASQ
+-A KUBE-EXT-LPLI5PP7N5LEMN6C -j KUBE-SVC-LPLI5PP7N5LEMN6C
+
+-A KUBE-NODEPORTS -p tcp -m comment --comment "default/react-np:http" -m tcp --dport 30123 -j KUBE-EXT-LPLI5PP7N5LEMN6C
+-A KUBE-NODEPORTS -p tcp -m comment --comment "ingress-nginx/ingress-nginx-controller:http" -m tcp --dport 32350 -j KUBE-EXT-CG5I4G2RS3ZVWGLK
+-A KUBE-NODEPORTS -p tcp -m comment --comment "ingress-nginx/ingress-nginx-controller:https" -m tcp --dport 30369 -j KUBE-EXT-EDNDUDH2C75GIR6O
+
+-A KUBE-SEP-AETKQYFO7WYOL6I2 -s 10.244.0.23/32 -m comment --comment "default/react-np:http" -j KUBE-MARK-MASQ
+-A KUBE-SEP-AETKQYFO7WYOL6I2 -p tcp -m comment --comment "default/react-np:http" -m tcp -j DNAT --to-destination 10.244.0.23:3000
+
+-A KUBE-SEP-BNI63XFAC34NGSSW -s 10.244.0.21/32 -m comment --comment "ingress-nginx/ingress-nginx-controller:https" -j KUBE-MARK-MASQ
+-A KUBE-SEP-BNI63XFAC34NGSSW -p tcp -m comment --comment "ingress-nginx/ingress-nginx-controller:https" -m tcp -j DNAT --to-destination 10.244.0.21:443
+
+-A KUBE-SEP-FJULLSD7XJG4UI6Z -s 10.244.0.20/32 -m comment --comment "default/react-np:http" -j KUBE-MARK-MASQ
+-A KUBE-SEP-FJULLSD7XJG4UI6Z -p tcp -m comment --comment "default/react-np:http" -m tcp -j DNAT --to-destination 10.244.0.20:3000
+
+-A KUBE-SEP-GZRVRHJZPT7RZZM4 -s 10.244.0.22/32 -m comment --comment "kube-system/kube-dns:metrics" -j KUBE-MARK-MASQ
+-A KUBE-SEP-GZRVRHJZPT7RZZM4 -p tcp -m comment --comment "kube-system/kube-dns:metrics" -m tcp -j DNAT --to-destination 10.244.0.22:9153
+
+-A KUBE-SEP-PR7ZAUAKSXCSP5NI -s 10.244.0.22/32 -m comment --comment "kube-system/kube-dns:dns" -j KUBE-MARK-MASQ
+-A KUBE-SEP-PR7ZAUAKSXCSP5NI -p udp -m comment --comment "kube-system/kube-dns:dns" -m udp -j DNAT --to-destination 10.244.0.22:53
+
+-A KUBE-SEP-RGYAGYZ6WFG3KA67 -s 10.244.0.21/32 -m comment --comment "ingress-nginx/ingress-nginx-controller:http" -j KUBE-MARK-MASQ
+-A KUBE-SEP-RGYAGYZ6WFG3KA67 -p tcp -m comment --comment "ingress-nginx/ingress-nginx-controller:http" -m tcp -j DNAT --to-destination 10.244.0.21:80
+
+-A KUBE-SEP-SPXS4Q7EQGBJVLTY -s 10.244.0.22/32 -m comment --comment "kube-system/kube-dns:dns-tcp" -j KUBE-MARK-MASQ
+-A KUBE-SEP-SPXS4Q7EQGBJVLTY -p tcp -m comment --comment "kube-system/kube-dns:dns-tcp" -m tcp -j DNAT --to-destination 10.244.0.22:53
+
+-A KUBE-SEP-UBDAZU6DDT47PLRO -s 10.244.0.21/32 -m comment --comment "ingress-nginx/ingress-nginx-controller-admission:https-webhook" -j KUBE-MARK-MASQ
+-A KUBE-SEP-UBDAZU6DDT47PLRO -p tcp -m comment --comment "ingress-nginx/ingress-nginx-controller-admission:https-webhook" -m tcp -j DNAT --to-destination 10.244.0.21:8443
+
+-A KUBE-SEP-VPILYQBSPPXYB66K -s 192.168.49.2/32 -m comment --comment "default/kubernetes:https" -j KUBE-MARK-MASQ
+-A KUBE-SEP-VPILYQBSPPXYB66K -p tcp -m comment --comment "default/kubernetes:https" -m tcp -j DNAT --to-destination 192.168.49.2:8443
+
+-A KUBE-SERVICES -d 10.110.204.46/32 -p tcp -m comment --comment "default/react-np:http cluster IP" -m tcp --dport 80 -j KUBE-SVC-LPLI5PP7N5LEMN6C
+-A KUBE-SERVICES -d 10.107.97.194/32 -p tcp -m comment --comment "ingress-nginx/ingress-nginx-controller:http cluster IP" -m tcp --dport 80 -j KUBE-SVC-CG5I4G2RS3ZVWGLK
+-A KUBE-SERVICES -d 10.107.97.194/32 -p tcp -m comment --comment "ingress-nginx/ingress-nginx-controller:https cluster IP" -m tcp --dport 443 -j KUBE-SVC-EDNDUDH2C75GIR6O
+-A KUBE-SERVICES -d 10.105.23.76/32 -p tcp -m comment --comment "ingress-nginx/ingress-nginx-controller-admission:https-webhook cluster IP" -m tcp --dport 443 -j KUBE-SVC-EZYNCFY2F7N6OQA2
+-A KUBE-SERVICES -d 10.96.0.10/32 -p udp -m comment --comment "kube-system/kube-dns:dns cluster IP" -m udp --dport 53 -j KUBE-SVC-TCOU7JCQXEZGVUNU
+-A KUBE-SERVICES -d 10.96.0.10/32 -p tcp -m comment --comment "kube-system/kube-dns:dns-tcp cluster IP" -m tcp --dport 53 -j KUBE-SVC-ERIFXISQEP7F7OF4
+-A KUBE-SERVICES -d 10.96.0.10/32 -p tcp -m comment --comment "kube-system/kube-dns:metrics cluster IP" -m tcp --dport 9153 -j KUBE-SVC-JD5MR3NA4I4DYORP
+-A KUBE-SERVICES -d 10.96.0.1/32 -p tcp -m comment --comment "default/kubernetes:https cluster IP" -m tcp --dport 443 -j KUBE-SVC-NPX46M4PTMTKRN6Y
+-A KUBE-SERVICES -m comment --comment "kubernetes service nodeports; NOTE: this must be the last rule in this chain" -m addrtype --dst-type LOCAL -j KUBE-NODEPORTS
+-A KUBE-SVC-CG5I4G2RS3ZVWGLK ! -s 10.244.0.0/16 -d 10.107.97.194/32 -p tcp -m comment --comment "ingress-nginx/ingress-nginx-controller:http cluster IP" -m tcp --dport 80 -j KUBE-MARK-MASQ
+-A KUBE-SVC-CG5I4G2RS3ZVWGLK -m comment --comment "ingress-nginx/ingress-nginx-controller:http -> 10.244.0.21:80" -j KUBE-SEP-RGYAGYZ6WFG3KA67
+-A KUBE-SVC-EDNDUDH2C75GIR6O ! -s 10.244.0.0/16 -d 10.107.97.194/32 -p tcp -m comment --comment "ingress-nginx/ingress-nginx-controller:https cluster IP" -m tcp --dport 443 -j KUBE-MARK-MASQ
+-A KUBE-SVC-EDNDUDH2C75GIR6O -m comment --comment "ingress-nginx/ingress-nginx-controller:https -> 10.244.0.21:443" -j KUBE-SEP-BNI63XFAC34NGSSW
+-A KUBE-SVC-ERIFXISQEP7F7OF4 ! -s 10.244.0.0/16 -d 10.96.0.10/32 -p tcp -m comment --comment "kube-system/kube-dns:dns-tcp cluster IP" -m tcp --dport 53 -j KUBE-MARK-MASQ
+-A KUBE-SVC-ERIFXISQEP7F7OF4 -m comment --comment "kube-system/kube-dns:dns-tcp -> 10.244.0.22:53" -j KUBE-SEP-SPXS4Q7EQGBJVLTY
+-A KUBE-SVC-EZYNCFY2F7N6OQA2 ! -s 10.244.0.0/16 -d 10.105.23.76/32 -p tcp -m comment --comment "ingress-nginx/ingress-nginx-controller-admission:https-webhook cluster IP" -m tcp --dport 443 -j KUBE-MARK-MASQ
+-A KUBE-SVC-EZYNCFY2F7N6OQA2 -m comment --comment "ingress-nginx/ingress-nginx-controller-admission:https-webhook -> 10.244.0.21:8443" -j KUBE-SEP-UBDAZU6DDT47PLRO
+-A KUBE-SVC-JD5MR3NA4I4DYORP ! -s 10.244.0.0/16 -d 10.96.0.10/32 -p tcp -m comment --comment "kube-system/kube-dns:metrics cluster IP" -m tcp --dport 9153 -j KUBE-MARK-MASQ
+-A KUBE-SVC-JD5MR3NA4I4DYORP -m comment --comment "kube-system/kube-dns:metrics -> 10.244.0.22:9153" -j KUBE-SEP-GZRVRHJZPT7RZZM4
+-A KUBE-SVC-LPLI5PP7N5LEMN6C ! -s 10.244.0.0/16 -d 10.110.204.46/32 -p tcp -m comment --comment "default/react-np:http cluster IP" -m tcp --dport 80 -j KUBE-MARK-MASQ
+-A KUBE-SVC-LPLI5PP7N5LEMN6C -m comment --comment "default/react-np:http -> 10.244.0.20:3000" -m statistic --mode random --probability 0.50000000000 -j KUBE-SEP-FJULLSD7XJG4UI6Z
+-A KUBE-SVC-LPLI5PP7N5LEMN6C -m comment --comment "default/react-np:http -> 10.244.0.23:3000" -j KUBE-SEP-AETKQYFO7WYOL6I2
+-A KUBE-SVC-NPX46M4PTMTKRN6Y ! -s 10.244.0.0/16 -d 10.96.0.1/32 -p tcp -m comment --comment "default/kubernetes:https cluster IP" -m tcp --dport 443 -j KUBE-MARK-MASQ
+-A KUBE-SVC-NPX46M4PTMTKRN6Y -m comment --comment "default/kubernetes:https -> 192.168.49.2:8443" -j KUBE-SEP-VPILYQBSPPXYB66K
+-A KUBE-SVC-TCOU7JCQXEZGVUNU ! -s 10.244.0.0/16 -d 10.96.0.10/32 -p udp -m comment --comment "kube-system/kube-dns:dns cluster IP" -m udp --dport 53 -j KUBE-MARK-MASQ
+-A KUBE-SVC-TCOU7JCQXEZGVUNU -m comment --comment "kube-system/kube-dns:dns -> 10.244.0.22:53" -j KUBE-SEP-PR7ZAUAKSXCSP5NI
+COMMIT

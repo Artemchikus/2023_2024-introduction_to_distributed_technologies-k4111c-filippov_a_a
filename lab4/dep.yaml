@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-d
+spec:
+  replicas: 2
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - frontend
+  template:
+    metadata:
+      labels:
+        creation_method: deployment
+        app: frontend
+    spec:
+      containers:
+        - image: ifilyaninitmo/itdt-contained-frontend:master
+          name: react
+          env:
+            - name: REACT_APP_USERNAME
+              value: artem
+            - name: REACT_APP_COMPANY_NAME
+              value: itmo
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP

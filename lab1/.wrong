@@ -1,0 +1,9 @@
+minikube kubectl -- port-forward service/vault 8200:8200
+minikube kubectl -- port-forward pod/vault 8200:8200 - нет разницы, непонятно зачем делали, не помогает достингуть цель
+зачем сервису порт
+
+systemd в контейнере
+
+ss -ln | grep 8200
+tcp   LISTEN 0      4096        127.0.0.1:8200             0.0.0.0:*          
+tcp   LISTEN 0      4096            [::1]:8200                [::]:*  

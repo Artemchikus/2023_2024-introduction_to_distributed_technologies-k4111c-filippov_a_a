@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: react-cm
+data:
+  react_app_username: "artem"
+  react_app_company_name: "itmo"

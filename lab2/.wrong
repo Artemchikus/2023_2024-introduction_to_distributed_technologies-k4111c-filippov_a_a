@@ -1,0 +1,11 @@
+открытый порт можно достать только из docekrfile
+идеальный пример значения deployment
+kubectl apply работает хз как
+
+The Deployment "react-d" is invalid: spec.template.spec.containers[0].ports[1].name: Duplicate value: "http"    
+почему ключ номер порта, а не имя
+
+как получить все ключи из etcd
+
+Session Affinity:         None
+а состояние сохраняется (видимо браузер виноват)

@@ -1,0 +1,19 @@
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: rack-224-ippool
+spec:
+  cidr: 192.168.224.0/24
+  ipipMode: Always
+  natOutgoing: true
+  nodeSelector: rack == "224"
+---
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: rack-225-ippool
+spec:
+  cidr: 192.168.225.0/24
+  ipipMode: Always
+  natOutgoing: true
+  nodeSelector: rack == "225"

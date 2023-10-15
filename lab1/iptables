@@ -1,0 +1,220 @@
+----------Start----------:
+
+*mangle
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+:KUBE-IPTABLES-HINT - [0:0]
+:KUBE-KUBELET-CANARY - [0:0]
+:KUBE-PROXY-CANARY - [0:0]
+COMMIT
+
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:DOCKER - [0:0]
+:DOCKER-ISOLATION-STAGE-1 - [0:0]
+:DOCKER-ISOLATION-STAGE-2 - [0:0]
+:DOCKER-USER - [0:0]
+:KUBE-EXTERNAL-SERVICES - [0:0]
+:KUBE-FIREWALL - [0:0]
+:KUBE-FORWARD - [0:0]
+:KUBE-KUBELET-CANARY - [0:0]
+:KUBE-NODEPORTS - [0:0]
+:KUBE-PROXY-CANARY - [0:0]
+:KUBE-PROXY-FIREWALL - [0:0]
+:KUBE-SERVICES - [0:0]
+-A INPUT -m conntrack --ctstate NEW -m comment --comment "kubernetes load balancer firewall" -j KUBE-PROXY-FIREWALL
+-A INPUT -m comment --comment "kubernetes health check service ports" -j KUBE-NODEPORTS
+-A INPUT -m conntrack --ctstate NEW -m comment --comment "kubernetes externally-visible service portals" -j KUBE-EXTERNAL-SERVICES
+-A INPUT -j KUBE-FIREWALL
+-A FORWARD -m conntrack --ctstate NEW -m comment --comment "kubernetes load balancer firewall" -j KUBE-PROXY-FIREWALL
+-A FORWARD -m comment --comment "kubernetes forwarding rules" -j KUBE-FORWARD
+-A FORWARD -m conntrack --ctstate NEW -m comment --comment "kubernetes service portals" -j KUBE-SERVICES
+-A FORWARD -m conntrack --ctstate NEW -m comment --comment "kubernetes externally-visible service portals" -j KUBE-EXTERNAL-SERVICES
+-A FORWARD -j DOCKER-USER
+-A FORWARD -j DOCKER-ISOLATION-STAGE-1
+-A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A FORWARD -o docker0 -j DOCKER
+-A FORWARD -i docker0 ! -o docker0 -j ACCEPT
+-A FORWARD -i docker0 -o docker0 -j ACCEPT
+-A OUTPUT -m conntrack --ctstate NEW -m comment --comment "kubernetes load balancer firewall" -j KUBE-PROXY-FIREWALL
+-A OUTPUT -m conntrack --ctstate NEW -m comment --comment "kubernetes service portals" -j KUBE-SERVICES
+-A OUTPUT -j KUBE-FIREWALL
+-A DOCKER-ISOLATION-STAGE-1 -i docker0 ! -o docker0 -j DOCKER-ISOLATION-STAGE-2
+-A DOCKER-ISOLATION-STAGE-1 -j RETURN
+-A DOCKER-ISOLATION-STAGE-2 -o docker0 -j DROP
+-A DOCKER-ISOLATION-STAGE-2 -j RETURN
+-A DOCKER-USER -j RETURN
+-A KUBE-FIREWALL ! -s "localhost" -d "localhost" -m comment --comment "block incoming localnet connections" -m conntrack ! --ctstate RELATED,ESTABLISHED,DNAT -j DROP
+-A KUBE-FORWARD -m conntrack --ctstate INVALID -j DROP
+-A KUBE-FORWARD -m comment --comment "kubernetes forwarding rules" -m mark --mark 0x4000/0x4000 -j ACCEPT
+-A KUBE-FORWARD -m comment --comment "kubernetes forwarding conntrack rule" -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+COMMIT
+
+*nat
+:PREROUTING ACCEPT [141:9228]
+:INPUT ACCEPT [133:8105]
+:OUTPUT ACCEPT [25141:1508448]
+:POSTROUTING ACCEPT [25190:1512302]
+:CNI-8866cf7a6b361a333ad741f4 - [0:0] - coredns
+:DOCKER - [0:0]
+:DOCKER_OUTPUT - [0:0]
+:DOCKER_POSTROUTING - [0:0]
+:KUBE-KUBELET-CANARY - [0:0]
+:KUBE-MARK-MASQ - [0:0]
+:KUBE-NODEPORTS - [0:0]
+:KUBE-POSTROUTING - [0:0]
+:KUBE-PROXY-CANARY - [0:0]
+:KUBE-SEP-IT2ZTR26TO4XFPTO - [0:0] - kube-dns:dns-tcp
+:KUBE-SEP-N4G2XR5TDX7PQE7P - [0:0] - kube-dns:metrics
+:KUBE-SEP-VPILYQBSPPXYB66K - [0:0] - kubernetes:httpsAPI
+:KUBE-SEP-YIL6JZP7A3QYXJU2 - [0:0] - kube-dns:dns-udp
+:KUBE-SERVICES - [0:0]
+:KUBE-SVC-ERIFXISQEP7F7OF4 - [0:0] - kube-dns:dns-tcp cluster IP
+:KUBE-SVC-JD5MR3NA4I4DYORP - [0:0] - kube-dns:kube-dns:metrics cluster IP
+:KUBE-SVC-NPX46M4PTMTKRN6Y - [0:0] - kube-dns:httpsAPI cluster IP
+:KUBE-SVC-TCOU7JCQXEZGVUNU - [0:0] - kube-dns:dns-udp cluster IP
+-A PREROUTING -m comment --comment "kubernetes service portals" -j KUBE-SERVICES
+-A PREROUTING -d "bridge-to-node-ip" -j DOCKER_OUTPUT
+-A PREROUTING -m addrtype --dst-type LOCAL -j DOCKER
+-A OUTPUT -m comment --comment "kubernetes service portals" -j KUBE-SERVICES
+-A OUTPUT -d "bridge-to-node-ip" -j DOCKER_OUTPUT
+-A OUTPUT ! -d "localhost" -m addrtype --dst-type LOCAL -j DOCKER
+-A POSTROUTING -m comment --comment "kubernetes postrouting rules" -j KUBE-POSTROUTING
+-A POSTROUTING -s "docker-network" ! -o docker0 -j MASQUERADE
+-A POSTROUTING -d "bridge-to-node-ip" -j DOCKER_POSTROUTING
+-A POSTROUTING -s "coredns-ip" -m comment --comment "name: \"bridge\" id: \"coredns\"" -j CNI-8866cf7a6b361a333ad741f4
+-A CNI-8866cf7a6b361a333ad741f4 -d "pod-network" -m comment --comment "name: \"bridge\" id: \"coredns\"" -j ACCEPT
+-A CNI-8866cf7a6b361a333ad741f4 ! -d "multicast-network" -m comment --comment "name: \"bridge\" id: \"coredns\"" -j MASQUERADE
+-A DOCKER -i docker0 -j RETURN
+-A DOCKER_OUTPUT -d "bridge-to-node-ip" -p tcp -m tcp --dport 53 -j DNAT --to-destination 127.0.0.11:46683
+-A DOCKER_OUTPUT -d "bridge-to-node-ip" -p udp -m udp --dport 53 -j DNAT --to-destination 127.0.0.11:56315
+-A DOCKER_POSTROUTING -s "docker-dns-service-ip" -p tcp -j SNAT --to-source "bridge-to-node-ip":53
+-A DOCKER_POSTROUTING -s "docker-dns-service-ip" -p udp -j SNAT --to-source "bridge-to-node-ip":53
+-A KUBE-MARK-MASQ -j MARK --set-xmark 0x4000/0x4000
+-A KUBE-POSTROUTING -m mark ! --mark 0x4000/0x4000 -j RETURN
+-A KUBE-POSTROUTING -j MARK --set-xmark 0x4000/0x0
+-A KUBE-POSTROUTING -m comment --comment "kubernetes service traffic requiring SNAT" -j MASQUERADE --random-fully
+-A KUBE-SEP-IT2ZTR26TO4XFPTO -s "coredns-ip" -m comment --comment "kube-system/kube-dns:dns-tcp" -j KUBE-MARK-MASQ
+-A KUBE-SEP-IT2ZTR26TO4XFPTO -p tcp -m comment --comment "kube-system/kube-dns:dns-tcp" -m tcp -j DNAT --to-destination "coredns-ip":53
+-A KUBE-SEP-N4G2XR5TDX7PQE7P -s "coredns-ip" -m comment --comment "kube-system/kube-dns:metrics" -j KUBE-MARK-MASQ
+-A KUBE-SEP-N4G2XR5TDX7PQE7P -p tcp -m comment --comment "kube-system/kube-dns:metrics" -m tcp -j DNAT --to-destination "coredns-ip":9153
+-A KUBE-SEP-VPILYQBSPPXYB66K -s "node-ip" -m comment --comment "default/kubernetes:https" -j KUBE-MARK-MASQ
+-A KUBE-SEP-VPILYQBSPPXYB66K -p tcp -m comment --comment "default/kubernetes:https" -m tcp -j DNAT --to-destination "node-ip":8443
+-A KUBE-SEP-YIL6JZP7A3QYXJU2 -s "coredns-ip" -m comment --comment "kube-system/kube-dns:dns" -j KUBE-MARK-MASQ
+-A KUBE-SEP-YIL6JZP7A3QYXJU2 -p udp -m comment --comment "kube-system/kube-dns:dns" -m udp -j DNAT --to-destination "coredns-ip":53
+-A KUBE-SERVICES -d "cube-dns-ip" -p tcp -m comment --comment "kube-system/kube-dns:dns-tcp cluster IP" -m tcp --dport 53 -j KUBE-SVC-ERIFXISQEP7F7OF4
+-A KUBE-SERVICES -d "cluster-api-ip" -p tcp -m comment --comment "default/kubernetes:https cluster IP" -m tcp --dport 443 -j KUBE-SVC-NPX46M4PTMTKRN6Y
+-A KUBE-SERVICES -d "cube-dns-ip" -p tcp -m comment --comment "kube-system/kube-dns:metrics cluster IP" -m tcp --dport 9153 -j KUBE-SVC-JD5MR3NA4I4DYORP
+-A KUBE-SERVICES -d "cube-dns-ip" -p udp -m comment --comment "kube-system/kube-dns:dns cluster IP" -m udp --dport 53 -j KUBE-SVC-TCOU7JCQXEZGVUNU
+-A KUBE-SERVICES -m comment --comment "kubernetes service nodeports; NOTE: this must be the last rule in this chain" -m addrtype --dst-type LOCAL -j KUBE-NODEPORTS
+-A KUBE-SVC-ERIFXISQEP7F7OF4 ! -s "pod-network" -d "cube-dns-ip" -p tcp -m comment --comment "kube-system/kube-dns:dns-tcp cluster IP" -m tcp --dport 53 -j KUBE-MARK-MASQ
+-A KUBE-SVC-ERIFXISQEP7F7OF4 -m comment --comment "kube-system/kube-dns:dns-tcp -> "coredns-ip":53" -j KUBE-SEP-IT2ZTR26TO4XFPTO
+-A KUBE-SVC-JD5MR3NA4I4DYORP ! -s "pod-network" -d "cube-dns-ip" -p tcp -m comment --comment "kube-system/kube-dns:metrics cluster IP" -m tcp --dport 9153 -j KUBE-MARK-MASQ
+-A KUBE-SVC-JD5MR3NA4I4DYORP -m comment --comment "kube-system/kube-dns:metrics -> "coredns-ip":9153" -j KUBE-SEP-N4G2XR5TDX7PQE7P
+-A KUBE-SVC-NPX46M4PTMTKRN6Y ! -s "pod-network" -d "cluster-api-ip" -p tcp -m comment --comment "default/kubernetes:https cluster IP" -m tcp --dport 443 -j KUBE-MARK-MASQ
+-A KUBE-SVC-NPX46M4PTMTKRN6Y -m comment --comment "default/kubernetes:https -> "node-ip":8443" -j KUBE-SEP-VPILYQBSPPXYB66K
+-A KUBE-SVC-TCOU7JCQXEZGVUNU ! -s "pod-network" -d "cube-dns-ip" -p udp -m comment --comment "kube-system/kube-dns:dns cluster IP" -m udp --dport 53 -j KUBE-MARK-MASQ
+-A KUBE-SVC-TCOU7JCQXEZGVUNU -m comment --comment "kube-system/kube-dns:dns -> "coredns-ip":53" -j KUBE-SEP-YIL6JZP7A3QYXJU2
+COMMIT
+
+
+
+
+--------------Post Pod Creation---------------:
+
+*nat
+:PREROUTING ACCEPT [141:9228]         --> :PREROUTING ACCEPT [142:9288]
+:INPUT ACCEPT [133:8105]              --> :INPUT ACCEPT [134:8165]
+:OUTPUT ACCEPT [25141:1508448]        --> :OUTPUT ACCEPT [25293:1517568]
+:POSTROUTING ACCEPT [25190:1512302]   --> :POSTROUTING ACCEPT [25342:1521422]
++(                                               
+:CNI-35092a27b7ed3d6bf29fb9b7 - [0:0] - vault-container
++)
+...
+#-A POSTROUTING -s "coredns-ip" -m comment --comment "name: \"bridge\" id: \"coredns\"" -j CNI-8866cf7a6b361a333ad741f4
++(
+-A POSTROUTING -s "pod-vault-ip" -m comment --comment "name: \"bridge\" id: \"vault-container\"" -j CNI-35092a27b7ed3d6bf29fb9b7
+-A CNI-35092a27b7ed3d6bf29fb9b7 -d "pod-network" -m comment --comment "name: \"bridge\" id: \"vault-container\"" -j ACCEPT
+-A CNI-35092a27b7ed3d6bf29fb9b7 ! -d "multicast-network" -m comment --comment "name: \"bridge\" id: \"vault-container\"" -j MASQUERADE
++)
+#-A CNI-8866cf7a6b361a333ad741f4 -d "pod-network" -m comment --comment "name: \"bridge\" id: \"coredns\"" -j ACCEPT
+...
+
+
+
+
+-------------Post Pod expose------------:
+
+*nat
+:PREROUTING ACCEPT [142:9288]         --> :PREROUTING ACCEPT [143:9348]
+:INPUT ACCEPT [134:8165]              --> :INPUT ACCEPT [135:8225]
+:OUTPUT ACCEPT [25293:1517568]        --> :OUTPUT ACCEPT [25401:1524048]
+:POSTROUTING ACCEPT [25342:1521422]   --> :POSTROUTING ACCEPT [25450:1527902]
+...
+#:DOCKER_POSTROUTING - [0:0]
++(
+:KUBE-EXT-VUGVVJAHU4RL2TIW - [0:0] - node-port of service vault
++)
+...
+#:KUBE-SEP-N4G2XR5TDX7PQE7P - [0:0] - kube-dns:metrics
++(
+:KUBE-SEP-RJZR3TNIUSAIDI5I - [0:0] - service vault
++)
+...
+#:KUBE-SVC-TCOU7JCQXEZGVUNU - [0:0] - kube-dns:dns-udp cluster IP
++(
+:KUBE-SVC-VUGVVJAHU4RL2TIW - [0:0] - service vault cluster IP
++)
+...
+#-A DOCKER_POSTROUTING -s "docker-dns-service-ip" -p udp -j SNAT --to-source "bridge-to-node-ip":53
++(
+-A KUBE-EXT-VUGVVJAHU4RL2TIW -m comment --comment "masquerade traffic for default/vault external destinations" -j KUBE-MARK-MASQ
+-A KUBE-EXT-VUGVVJAHU4RL2TIW -j KUBE-SVC-VUGVVJAHU4RL2TIW
++)
+#-A KUBE-MARK-MASQ -j MARK --set-xmark 0x4000/0x4000
++(
+-A KUBE-NODEPORTS -p tcp -m comment --comment "default/vault" -m tcp --dport 30272 -j KUBE-EXT-VUGVVJAHU4RL2TIW
++)
+...
+#-A KUBE-SEP-N4G2XR5TDX7PQE7P -p tcp -m comment --comment "kube-system/kube-dns:metrics" -m tcp -j DNAT --to-destination "coredns-ip":9153
++(
+-A KUBE-SEP-RJZR3TNIUSAIDI5I -s "pod-vault-ip" -m comment --comment "default/vault" -j KUBE-MARK-MASQ
+-A KUBE-SEP-RJZR3TNIUSAIDI5I -p tcp -m comment --comment "default/vault" -m tcp -j DNAT --to-destination "pod-vault-ip":8200
++)
+...
+-(
+-A KUBE-SERVICES -d "cube-dns-ip" -p tcp -m comment --comment "kube-system/kube-dns:dns-tcp cluster IP" -m tcp --dport 53 -j KUBE-SVC-ERIFXISQEP7F7OF4
+-)
+...
+#-A KUBE-SERVICES -d "cube-dns-ip" -p udp -m comment --comment "kube-system/kube-dns:dns cluster IP" -m udp --dport 53 -j KUBE-SVC-TCOU7JCQXEZGVUNU
++(
+-A KUBE-SERVICES -d "cube-dns-ip" -p tcp -m comment --comment "kube-system/kube-dns:dns-tcp cluster IP" -m tcp --dport 53 -j KUBE-SVC-ERIFXISQEP7F7OF4
+-A KUBE-SERVICES -d "service-vault-ip" -p tcp -m comment --comment "default/vault cluster IP" -m tcp --dport 8200 -j KUBE-SVC-VUGVVJAHU4RL2TIW
++)
+...
+#-A KUBE-SVC-TCOU7JCQXEZGVUNU -m comment --comment "kube-system/kube-dns:dns -> "coredns-ip":53" -j KUBE-SEP-YIL6JZP7A3QYXJU2
++(
+-A KUBE-SVC-VUGVVJAHU4RL2TIW ! -s "pod-network" -d "service-vault-ip" -p tcp -m comment --comment "default/vault cluster IP" -m tcp --dport 8200 -j KUBE-MARK-MASQ
+-A KUBE-SVC-VUGVVJAHU4RL2TIW -m comment --comment "default/vault -> pod-vault-ip:8200" -j KUBE-SEP-RJZR3TNIUSAIDI5I
++)
+
+
+coredns-id = c29542333ca016987e1b27673f75e9338ff8f8a107581c3755dcf72b72a17a44
+vault-container-id = dffe7e0468178c3a3a7f194babfbe0be4ef7e1da656aaed4abdb51b9ad6f9875
+service-vault-ip = 10.98.118.55/32
+cluster-api-ip = 10.96.0.1/32
+pod-vault-ip = 10.244.0.5/32
+node-ip = 192.168.49.2/32
+coredns-ip = 10.244.0.2/32
+cube-dns-ip = 10.96.0.10/32
+localhost = 127.0.0.0/8
+bridge-to-node-ip = 192.168.49.1/32
+docker-network = 172.17.0.0/16
+pod-network = 10.244.0.0/16
+multicast-network = 224.0.0.0/4
+docker-dns-service-ip = 127.0.0.11/32

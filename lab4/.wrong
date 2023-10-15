@@ -1,0 +1,121 @@
+nodeSelector ужасный
+в гайде неправильная версия
+
+ipipMode: Always
+natOutgoing: true - как будто бред
+
+дефолтный ippool все перебивает
+
+зачем включать режим проброса протов?
+
+если разворчивать не через kubectl calico то ничего не работет, кроме проброса протов
+
+попробуйте попинговать "поды" используя FQDN имя соседенего "пода"
+нельзя пинговать сервис так как он понимает только tcp и udp(не точно), курлить сервис без проблем, правда курла нет
+
+кто такой Ivan Glebov
+
+общаться между подами через nodeport норм?
+
+Calico перехватывает kubeadmin? или меняет после создания пода?
+
+как сервис найти если его нет?
+env при удалении сервиса не исчезает
+
+пока не перезапустишь старые поды, ip останется старым база
+
+почему у calico нет нормального debug мода
+
+ippool делится на ipamblocks по 64 адреса(дефолт), которые привязываюся к узлам с метками через blockaffinities, поэтому всегда удалять с помощью calico, так как ippool удалил, а блоки и првязки в api мусором остались
+
+KUBERNETES_SERVICE_PORT=443
+KUBERNETES_SERVICE_PORT_HTTPS=443
+KUBERNETES_SERVICE_HOST=10.96.0.1
+
+KUBERNETES_PORT=tcp://10.96.0.1:443
+KUBERNETES_PORT_443_TCP=tcp://10.96.0.1:443
+KUBERNETES_PORT_443_TCP_ADDR=10.96.0.1
+KUBERNETES_PORT_443_TCP_PORT=443
+KUBERNETES_PORT_443_TCP_PROTO=tcp
+
+HOSTNAME=react-d-86c848f59-krrw5
+
+
+если сначала сервис потом под
+
+REACT_NP_SERVICE_HOST=10.98.178.192
+REACT_NP_SERVICE_PORT=80
+REACT_NP_SERVICE_PORT_HTTP=80
+
+REACT_NP_PORT=tcp://10.98.178.192:80
+REACT_NP_PORT_80_TCP=tcp://10.98.178.192:80
+REACT_NP_PORT_80_TCP_ADDR=10.98.178.192
+REACT_NP_PORT_80_TCP_PORT=80
+REACT_NP_PORT_80_TCP_PROTO=tcp
+
+docker до сих пор не может в нормальный формат вывода
+
+masterNode
+
+K8s_react_react-D-86c848f59-Gc4z8_default_55100cee-4810-4daf-Bb44-297d1bf43fba_0
+K8s_POD_react-D-86c848f59-Gc4z8_default_55100cee-4810-4daf-Bb44-297d1bf43fba_0
+
+K8s_calico-Kube-Controllers_calico-Kube-Controllers-85578c44bf-76fnf_kube-System_49c2abcd-2e4b-4601-8629-576561efb784_1
+K8s_POD_calico-Kube-Controllers-85578c44bf-76fnf_kube-System_49c2abcd-2e4b-4601-8629-576561efb784_9
+
+K8s_coredns_coredns-5d78c9869d-H67ft_kube-System_59baede3-B308-4c2e-878d-3c901835c9df_1
+K8s_POD_coredns-5d78c9869d-H67ft_kube-System_59baede3-B308-4c2e-878d-3c901835c9df_11
+
+K8s_calico-Node_calico-Node-Mbbdz_kube-System_a40278e1-1aba-4715-981c-22fa6d7fda41_0
+K8s_POD_calico-Node-Mbbdz_kube-System_a40278e1-1aba-4715-981c-22fa6d7fda41_0
+
+K8s_storage-Provisioner_storage-Provisioner_kube-System_09d5493b-0d2f-4b0e-Ba04-41f84d7b8276_0
+K8s_POD_storage-Provisioner_kube-System_09d5493b-0d2f-4b0e-Ba04-41f84d7b8276_0
+
+K8s_kube-Proxy_kube-Proxy-Jm7wp_kube-System_41f70fb5-8b82-459a-8f19-2bc6a46d220c_0
+K8s_POD_kube-Proxy-Jm7wp_kube-System_41f70fb5-8b82-459a-8f19-2bc6a46d220c_0
+
+K8s_kube-Controller-Manager_kube-Controller-Manager-Multinode-Demo_kube-System_489643e077f3b3e15bc14df8cdc4657c_0
+K8s_POD_kube-Controller-Manager-Multinode-Demo_kube-System_489643e077f3b3e15bc14df8cdc4657c_0
+
+K8s_etcd_etcd-Multinode-Demo_kube-System_5dc7b9bb447146c3d46e2add4737c863_0
+K8s_POD_etcd-Multinode-Demo_kube-System_5dc7b9bb447146c3d46e2add4737c863_0
+
+K8s_kube-Apiserver_kube-Apiserver-Multinode-Demo_kube-System_e45e61f793472d282f438864ae3d4a0b_0
+K8s_POD_kube-Apiserver-Multinode-Demo_kube-System_e45e61f793472d282f438864ae3d4a0b_0
+
+K8s_kube-Scheduler_kube-Scheduler-Multinode-Demo_kube-System_0746005cace5cd5daed21300b8a4d201_0
+K8s_POD_kube-Scheduler-Multinode-Demo_kube-System_0746005cace5cd5daed21300b8a4d201_0
+
+workerNode
+
+K8s_react_react-D-86c848f59-R5594_default_c0b2fb05-31bf-4265-941b-E0a707db49fa_0
+K8s_POD_react-D-86c848f59-R5594_default_c0b2fb05-31bf-4265-941b-E0a707db49fa_0
+
+K8s_calico-Node_calico-Node-28gj5_kube-System_ec53ab10-6f28-4f94-B629-0868b64778e3_0
+K8s_POD_calico-Node-28gj5_kube-System_ec53ab10-6f28-4f94-B629-0868b64778e3_0
+
+K8s_kube-Proxy_kube-Proxy-N984v_kube-System_870809ed-Cc54-4930-B43a-04bf9e549b9f_0
+K8s_POD_kube-Proxy-N984v_kube-System_870809ed-Cc54-4930-B43a-04bf9e549b9f_0
+
+
+господа я нашел под!
+
+root      655494  0.0  0.0 720248 10588 ?        Sl   14:13   0:00 /usr/bin/containerd-shim-runc-v2 -namespace moby -id 2ab398ee708b897b8037643c4fbaa0f1e4
+65535     655517  0.0  0.0   1028   640 ?        Ss   14:13   0:00  \_ /pause
+root      655597  0.0  0.0 720824 11088 ?        Sl   14:13   0:02 /usr/bin/containerd-shim-runc-v2 -namespace moby -id f176ea0ba9afc3a77e58b29771beac4b26
+root      655617  0.0  0.1 259296 44272 ?        Ssl  14:13   0:00  \_ node node.js
+
+nobody - пользователь, не являющийся владельцем ни одного файла, не состоящий ни в одной привилегированной группе, и не имеющий никаких полномочий, кроме стандартных для обычных пользователей (65535).
+
+4026533540 mnt         1 655517 65535 /pause
+4026533541 uts         1 655517 65535 /pause
+4026533542 ipc         2 655517 65535 /pause
+4026533543 pid         1 655517 65535 /pause
+4026533544 net         2 655517 65535 /pause
+4026533686 cgroup      1 655517 65535 /pause
+
+4026533689 mnt         1 655617 root  node node.js
+4026533690 uts         1 655617 root  node node.js
+4026533691 pid         1 655617 root  node node.js
+4026533692 cgroup      1 655617 root  node node.jsgit 
